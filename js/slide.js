@@ -6,9 +6,34 @@ export default class Slide {
   }
 
   onStart(event) {
-    event.preventDefault();
-    this.dist.startX = event.clientX;
-    this.wrapper.addEventListener("mousemove", this.onMove);
+    let movetype;
+
+    if (event.type === "mousedown") {
+      event.preventDefault();
+      this.dist.startX = event.clientX;
+      movetype = "mousemove";
+      // console.log(event);
+    } else {
+      this.dist.startX = event.changedTouches[0].clientX;
+      movetype = "touchmove";
+      // console.log(event);
+    }
+    this.wrapper.addEventListener(movetype, this.onMove);
+  }
+
+  onMove(event) {
+    const pointerPosition =
+      event.type === "mousemove"
+        ? event.clientX
+        : event.changedTouches[0].clientX;
+    const finalPosition = this.updatePosition(pointerPosition);
+    this.moveSlide(finalPosition);
+  }
+
+  onEnd(event) {
+    const movetype = event.type === "mouseup" ? "mousemove" : "touchmove";
+    this.wrapper.removeEventListener(movetype, this.onMove);
+    this.dist.finalPosition = this.dist.movePosition;
   }
 
   updatePosition(clientX) {
@@ -21,20 +46,12 @@ export default class Slide {
     this.slide.style.transform = `translate3d(${distX}px, 0, 0)`;
   }
 
-  onMove(event) {
-    const finalPosition = this.updatePosition(event.clientX);
-    this.moveSlide(finalPosition);
-  }
-
-  onEnd() {
-    this.wrapper.removeEventListener("mousemove", this.onMove);
-    this.dist.finalPosition = this.dist.movePosition;
-  }
-
   // ADICIONA EVENTOS AO WRAPPER
   addSlideEvents() {
     this.wrapper.addEventListener("mousedown", this.onStart);
     this.wrapper.addEventListener("mouseup", this.onEnd);
+    this.wrapper.addEventListener("touchstart", this.onStart);
+    this.wrapper.addEventListener("touchend", this.onEnd);
   }
 
   // metodo para referenciar o this a class Slide
