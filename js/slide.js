@@ -44,7 +44,6 @@ export default class Slide {
     this.onEnd = this.onEnd.bind(this);
   }
 
-  // função que inicia
   init() {
     this.bindEvents();
     this.addSlideEvents();
