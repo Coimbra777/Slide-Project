@@ -3,6 +3,7 @@ export default class Slide {
     this.slide = document.querySelector(slide);
     this.wrapper = document.querySelector(wrapper);
     this.dist = { finalPosition: 0, startX: 0, movement: 0 };
+    this.activeClass = "active";
   }
 
   onStart(event) {
@@ -73,13 +74,6 @@ export default class Slide {
     this.wrapper.addEventListener("touchend", this.onEnd);
   }
 
-  // metodo para referenciar o this a class Slide
-  bindEvents() {
-    this.onStart = this.onStart.bind(this);
-    this.onMove = this.onMove.bind(this);
-    this.onEnd = this.onEnd.bind(this);
-  }
-
   // metodo que calcula posição das imagens
   slidePosition(slide) {
     const margin = (this.wrapper.offsetWidth - slide.offsetWidth) / 2;
@@ -108,16 +102,47 @@ export default class Slide {
     this.moveSlide(activeSlide.position);
     this.slidesIndexNav(index);
     this.dist.finalPosition = activeSlide.position;
+    this.changeActiveClass();
   }
 
+  // metodo para o evento do Recize da tela
+  onResize() {
+    setTimeout(() => {
+      this.slideConfig();
+      this.changeSlide(this.index.active);
+    }, 500);
+  }
+  addRecizeEvent() {
+    window.addEventListener("resize", this.onResize);
+  }
+
+  // metodo para ativar a classe nos elementos li
+  changeActiveClass() {
+    this.slideArray[this.index.active].element.classList.add(this.activeClass);
+  }
+
+  // metodo para slide anterior
   activePrevSlide() {
+    this.slideArray.forEach((item) =>
+      item.element.classList.remove(this.activeClass)
+    );
     if (this.index.prev !== undefined) this.changeSlide(this.index.prev);
   }
+  // metodo para proximo slide
 
   activeNextSlide() {
     if (this.index.next !== undefined) this.changeSlide(this.index.next);
   }
 
+  // metodo para referenciar o this a class Slide
+  bindEvents() {
+    this.onStart = this.onStart.bind(this);
+    this.onMove = this.onMove.bind(this);
+    this.onEnd = this.onEnd.bind(this);
+    this.onResize = this.onResize.bind(this);
+  }
+
+  // metodo inicial
   init() {
     this.bindEvents();
     this.transition(true);
