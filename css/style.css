@@ -75,24 +75,47 @@ img {
 [data-control="slide"] li a:hover {
   background: #ff4d6e;
 }
-/* .slide-wrapper .btn {
-  font-size: 1.5rem;
-  background: green;
-  color: #fff;
-  padding: 10px 2px;
-  border-radius: 50%;
-  border: none;
-  margin: 10px;
-  position: absolute;
-  cursor: pointer;
-} */
 
-/* .btn.prev {
-  top: 50%;
-  left: 0;
+.custom-controls {
+  display: flex;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  justify-content: center;
+  flex-wrap: wrap;
 }
 
-.btn.next {
-  top: 50%;
-  right: 0;
-} */
+.custom-controls li {
+  opacity: 0.8;
+  transform: scale(0.8);
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  overflow: hidden;
+  margin: 2px;
+  box-shadow: 0 2px 2px rgba(0, 0, 0, 0.5);
+  transition: 0.3s;
+}
+.custom-controls li.active {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.arrow-nav {
+  display: flex;
+  justify-content: space-around;
+  margin: 20px 0;
+}
+
+.arrow-nav button {
+  cursor: pointer;
+  border: none;
+  border-radius: 4px;
+  width: 40px;
+  height: 40px;
+  background: #eb5 url("../img/arrow.svg") center center no-repeat;
+  color: white;
+}
+
+.arrow-nav button.prev {
+  transform: rotate(-180deg);
+}
